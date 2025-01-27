@@ -1,0 +1,233 @@
+.photosynthesis-diagram {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.environmental-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.chloroplast-diagram {
+  width: 600px;
+  height: 400px;
+  margin: 2rem auto;
+  position: relative;
+  background: #e8f5e9;
+  border-radius: 200px;
+  overflow: hidden;
+}
+
+.component {
+  position: absolute;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.component:hover {
+  filter: brightness(1.1);
+}
+
+.component.active {
+  outline: 2px solid #4caf50;
+}
+
+.thylakoid {
+  width: 70%;
+  height: 60%;
+  top: 20%;
+  left: 15%;
+  background: #81c784;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.grana {
+  width: 20px;
+  height: 80%;
+  background: #4caf50;
+  border-radius: 5px;
+}
+
+.stroma {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  pointer-events: none;
+}
+
+.calvin-cycle {
+  width: 100px;
+  height: 100px;
+  border: 2px dashed #4caf50;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 20%;
+  right: 20%;
+  animation: rotate 10s linear infinite;
+}
+
+.membrane {
+  width: 100%;
+  height: 100%;
+  border: 3px solid #66bb6a;
+  border-radius: 200px;
+  pointer-events: none;
+}
+
+.component-info {
+  margin: 2rem 0;
+  padding: 1rem;
+  background: #f1f8e9;
+  border-radius: 8px;
+}
+
+.glucose-production {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 20px;
+  background: #e8f5e9;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+
+.progress {
+  height: 100%;
+  background: #4caf50;
+  transition: width 0.3s ease;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.photosynthesis-game {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  min-height: 100vh;
+  background: #ffffff;
+  font-family: 'Inter', -apple-system, sans-serif;
+  color: #2d3748;
+}
+
+.game-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: #f7fafc;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.game-header h2 {
+  font-size: 2.5rem;
+  color: #2d3748;
+  margin-bottom: 1rem;
+}
+
+.game-stats {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  font-size: 1.2rem;
+  margin: 1rem 0;
+}
+
+.game-area {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.resource-containers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.resource-container {
+  background: #f7fafc;
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
+  border: 1px solid #e2e8f0;
+}
+
+.resource-button {
+  font-size: 2rem;
+  padding: 1rem;
+  background: white;
+  border: 2px solid #48bb78;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #2d3748;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.resource-button:hover:not(:disabled) {
+  background: #f0fff4;
+  transform: translateY(-2px);
+}
+
+.resource-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.resource-level {
+  height: 12px;
+  background: #edf2f7;
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+
+.level-fill {
+  height: 100%;
+  background: #48bb78;
+  transition: width 0.3s ease;
+}
+
+.resource-label {
+  font-size: 1rem;
+  color: #4a5568;
+  margin-top: 0.5rem;
+}
+
+/* Remove unnecessary animations and effects */
+
+@media (max-width: 768px) {
+  .resource-containers {
+    grid-template-columns: 1fr;
+  }
+  
+  .game-stats {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}

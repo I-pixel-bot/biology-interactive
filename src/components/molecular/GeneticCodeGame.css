@@ -1,0 +1,305 @@
+.genetic-game {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.codon-wheel {
+  width: 400px;
+  height: 400px;
+  margin: 2rem auto;
+  position: relative;
+  border-radius: 50%;
+  background: #f0f8ff;
+}
+
+.game-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+.timer-display {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.codon-card {
+  padding: 1rem;
+  background: white;
+  border: 2px solid #3498db;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.codon-card:hover {
+  transform: scale(1.05);
+}
+
+.codon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.genetic-code-game {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+  padding: 2rem;
+  color: #fff;
+  font-family: 'Press Start 2P', cursive;
+}
+
+.game-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.game-header h2 {
+  font-size: 3rem;
+  color: #00ff00;
+  text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
+  margin-bottom: 2rem;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+select, button {
+  background: #2a2a2a;
+  color: #00ff00;
+  border: 2px solid #00ff00;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Press Start 2P', cursive;
+  text-transform: uppercase;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+select:hover, button:hover {
+  background: #00ff00;
+  color: #000;
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+}
+
+.game-area {
+  max-width: 800px;
+  margin: 0 auto;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 2rem;
+  border-radius: 10px;
+  border: 2px solid #00ff00;
+  box-shadow: 0 0 30px rgba(0, 255, 0, 0.2);
+}
+
+.stats {
+  display: flex;
+  justify-content: space-around;
+  font-size: 1.8rem;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.score, .combo {
+  text-shadow: 0 0 10px currentColor;
+}
+
+.score { color: #00ff00; }
+.combo { color: #ff00ff; }
+.timer { color: #ffff00; }
+
+.codon-display {
+  background: #000;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.current-codon {
+  font-size: 4rem;
+  color: #fff;
+  text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff;
+  margin-bottom: 1rem;
+  letter-spacing: 0.5rem;
+  transition: all 0.3s ease;
+  animation: floatAnimation 2s ease-in-out infinite;
+}
+
+.current-codon.highlight {
+  animation: correctAnswer 0.8s ease;
+  color: #00ff00;
+  text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 30px #00ff00;
+}
+
+.remaining-sequence {
+  font-size: 1.5rem;
+  color: #666;
+  letter-spacing: 0.2rem;
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.option-button {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(45deg, #1a1a1a, #2a2a2a);
+  border: 2px solid #ff00ff;
+  color: #fff;
+  text-shadow: 0 0 5px #ff00ff;
+  font-size: 1.8rem;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.option-button:before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+  transform: rotate(45deg);
+  transition: all 0.3s ease;
+}
+
+.option-button:hover:before {
+  animation: shine 1s forwards;
+}
+
+.option-button.correct {
+  animation: correctPulse 0.8s ease;
+  background: linear-gradient(45deg, #00ff00, #00aa00);
+  border-color: #00ff00;
+  color: #000;
+  text-shadow: none;
+}
+
+.option-button.wrong {
+  animation: wrongShake 0.8s ease;
+  background: linear-gradient(45deg, #ff0000, #aa0000);
+  border-color: #ff0000;
+}
+
+.option-button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.game-over {
+  text-align: center;
+  padding: 3rem;
+  background: rgba(0, 0, 0, 0.9);
+  border-radius: 10px;
+  border: 2px solid #ff00ff;
+  max-width: 600px;
+  margin: 2rem auto;
+}
+
+.game-over h3 {
+  font-size: 3rem;
+  color: #ff00ff;
+  text-shadow: 0 0 15px #ff00ff;
+  margin-bottom: 2rem;
+}
+
+.game-over p {
+  font-size: 2rem;
+  color: #00ff00;
+  margin-bottom: 2rem;
+}
+
+@keyframes neonPulse {
+  0% { opacity: 0.8; }
+  50% { opacity: 1; }
+  100% { opacity: 0.8; }
+}
+
+.correct-answer {
+  animation: correctFlash 0.5s ease;
+}
+
+@keyframes correctFlash {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); background: #00ff00; }
+  100% { transform: scale(1); }
+}
+
+.wrong-answer {
+  animation: wrongShake 0.5s ease;
+}
+
+@keyframes wrongShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+.feedback {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  color: #fff;
+  text-shadow: 0 0 10px #00ff00;
+  pointer-events: none;
+  animation: feedbackPop 0.8s ease-out;
+}
+
+@keyframes shine {
+  0% { transform: translateX(-200%) rotate(45deg); }
+  100% { transform: translateX(200%) rotate(45deg); }
+}
+
+@keyframes correctPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); box-shadow: 0 0 30px #00ff00; }
+  100% { transform: scale(1); }
+}
+
+@keyframes feedbackPop {
+  0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+  50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+}
+
+@keyframes floatAnimation {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes pulseHighlight {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateY(-20px); }
+  20% { opacity: 1; transform: translateY(0); }
+  80% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(20px); }
+}

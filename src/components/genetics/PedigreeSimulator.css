@@ -1,0 +1,198 @@
+.pedigree-simulator {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.toolbar {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tools {
+  display: flex;
+  gap: 1rem;
+}
+
+.tools button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background: #f0f0f0;
+}
+
+.tools button.active {
+  background: var(--primary-color);
+  color: white;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.pedigree-chart {
+  position: relative;
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  min-height: 600px;
+  overflow: hidden;
+  cursor: crosshair;
+}
+
+.connections {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.family-member {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  user-select: none;
+  -webkit-user-drag: none;
+  border: 2px solid #2c3e50;
+  background: white;
+  /* Remove all border-radius by default */
+  border-radius: 0;
+}
+
+/* Only apply border-radius for female */
+.family-member.female {
+  border-radius: 50%;
+}
+
+/* Ensure male stays square */
+.family-member.male {
+  border-radius: 0;
+}
+
+/* Keep affected styling simple */
+.family-member.affected {
+  background: #2c3e50;
+}
+
+/* Add standard pedigree notation for carrier members */
+.family-member.carrier {
+  background: white;
+  position: relative;
+}
+
+.family-member.carrier::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  background: #2c3e50;
+  border-radius: 50%;
+}
+
+/* Add standard pedigree notation for deceased members */
+.family-member.deceased {
+  position: relative;
+}
+
+.family-member.deceased::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  height: 100%;
+  width: 2px;
+  background: #2c3e50;
+  transform: rotate(45deg);
+}
+
+/* Remove ALL other shape-related styles */
+.family-member::before,
+.family-member::after,
+.family-member > * {
+  border-radius: 0;
+}
+
+.family-member.selected {
+  outline: 3px solid var(--accent-color);
+}
+
+.family-member.connecting {
+  cursor: crosshair;
+  outline: 2px solid var(--primary-color);
+}
+
+.family-member.dragging {
+  cursor: crosshair;
+  outline: 2px solid var(--primary-color);
+  z-index: 3;
+}
+
+.member-controls {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.family-member:hover .member-controls {
+  opacity: 1;
+}
+
+.member-controls button {
+  padding: 0.25rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+select {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+button {
+  background: #3498db;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #2980b9;
+}
+
+.generate-button {
+  background: var(--accent-color);
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.2s ease;
+}
+
+.generate-button:hover {
+  background: var(--primary-color);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}

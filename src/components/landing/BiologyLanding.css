@@ -1,0 +1,280 @@
+.biology-landing {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+  font-family: 'Inter', -apple-system, sans-serif;
+}
+
+.hero-section {
+  text-align: left;
+  padding: 4rem 2rem;
+  background: var(--primary-color);
+  margin-bottom: 2rem;
+  border-radius: 0.75rem;
+  color: white;
+  background: linear-gradient(135deg, #2c5282, #2b6cb0);
+  padding: 8rem 2rem 6rem;
+  text-align: center;
+}
+
+.hero-section h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(to right, #ffffff, #e2e8f0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-section p {
+  font-size: 1.25rem;
+  opacity: 0.9;
+  max-width: 600px;
+  font-size: 1.25rem;
+  line-height: 1.7;
+  margin-bottom: 3rem;
+  color: #e2e8f0;
+}
+
+.topic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+
+.topic-section {
+  background: var(--background-white);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(0,0,0,0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.topic-section:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.topic-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+.topic-header h2 {
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.topic-links {
+  padding: 1rem;
+}
+
+.topic-link {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  margin: 0.25rem 0;
+  color: var(--text-primary);
+  text-decoration: none;
+  border-radius: 0.5rem;
+  font-weight: 500;
+}
+
+.topic-link:hover {
+  background: var(--background-light);
+  color: var(--primary-color);
+}
+
+.topic-icon {
+  margin-right: 0.75rem;
+  font-size: 1.25rem;
+}
+
+.study-count {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.main-nav {
+  background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  padding: 1rem 0;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+}
+
+.nav-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.logo-icon {
+  font-size: 1.8rem;
+}
+
+.institution-link {
+  color: #4a5568;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.hero-badges,
+.badge,
+.badge-number,
+.badge-text {
+  display: none;
+}
+
+.tools-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+.tool-category {
+  margin-bottom: 4rem;
+}
+
+.category-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 2rem;
+  color: #2d3748;
+  margin-bottom: 2rem;
+}
+
+.category-icon {
+  font-size: 2.2rem;
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.tool-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.tool-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+  border-color: #90cdf4;
+}
+
+.tool-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.tool-content h3 {
+  font-size: 1.5rem;
+  color: #2d3748;
+  margin-bottom: 0.75rem;
+}
+
+.tool-content p {
+  color: #4a5568;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.tool-link {
+  color: #3182ce;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  margin-top: auto;
+}
+
+.site-footer {
+  background: #2d3748;
+  color: white;
+  padding: 4rem 2rem 2rem;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.footer-section h4 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: #e2e8f0;
+}
+
+.footer-section p {
+  color: #a0aec0;
+  line-height: 1.6;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 2rem;
+  border-top: 1px solid #4a5568;
+  color: #a0aec0;
+}
+
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero-badges {
+    gap: 1.5rem;
+  }
+
+  .tools-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr;
+  }
+}

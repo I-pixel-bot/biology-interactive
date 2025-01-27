@@ -1,0 +1,1856 @@
+.cell-cycle-simulator {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a192f 0%, #172a45 100%);
+  color: #fff;
+  padding: 2rem;
+  font-family: 'Roboto', sans-serif;
+}
+
+.cell-stage {
+  width: 500px;
+  height: 500px;
+  margin: 2rem auto;
+  position: relative;
+  border-radius: 50%;
+  background: #f0f8ff;
+  overflow: hidden;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  margin-bottom: 3rem;
+}
+
+.control-button {
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  background: transparent;
+  border: 2px solid #64ffda;
+  color: #64ffda;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.control-button:hover:not(:disabled) {
+  background: rgba(100, 255, 218, 0.1);
+  transform: translateY(-2px);
+}
+
+.control-button.active {
+  background: #64ffda;
+  color: #0a192f;
+}
+
+.control-button.reset {
+  background: transparent;
+  border: 2px solid #ff5555;
+  color: #ff5555;
+}
+
+.control-button.reset:hover:not(:disabled) {
+  background: rgba(255, 85, 85, 0.1);
+  transform: translateY(-2px);
+}
+
+.control-button.reset:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.simulation-area {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.cell-visual {
+  width: 600px;
+  height: 600px;
+  background: rgba(40, 42, 54, 0.95);
+  border-radius: 50%;
+  position: relative;
+  border: 4px solid #64ffda;
+  box-shadow: 0 0 30px rgba(100, 255, 218, 0.2);
+  margin: 0 auto;
+  overflow: hidden;
+  transition: all 0.5s ease;
+}
+
+.nucleus {
+  position: absolute;
+  width: 70%;
+  height: 70%;
+  left: 15%;
+  top: 15%;
+  border: 3px dashed #64ffda;
+  border-radius: 50%;
+  transition: all 0.8s ease;
+  z-index: 1;
+}
+
+.nucleus.split {
+  clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+  animation: splitNucleus 2s ease-in-out;
+}
+
+.stage-info {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid #64ffda;
+}
+
+.stage-name {
+  font-size: 2rem;
+  color: #64ffda;
+  margin-bottom: 1rem;
+}
+
+.stage-description {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: #8892b0;
+}
+
+.chromosome {
+  position: absolute;
+  width: 60px;
+  height: 30px;
+  z-index: 3;
+  --condensation-state: 0;
+  transform: scale(calc(1 + (var(--condensation-state) * 0.5)));
+  transition: all 0.5s ease;
+}
+
+.chromatid {
+  position: absolute;
+  width: 100%;
+  height: 12px;
+  background: #ff79c6;
+  border-radius: 6px;
+  transition: all 0.8s ease;
+}
+
+.chromatid.sister1 {
+  top: 0;
+}
+
+.chromatid.sister2 {
+  bottom: 0;
+}
+
+.chromatid.top {
+  top: -20px;
+}
+
+.chromatid.bottom {
+  bottom: -20px;
+}
+
+.chromosome.paired {
+  height: 80px;
+  animation: pair 1s ease-in-out;
+}
+
+.chromosome.condensed {
+  transform-origin: center;
+  animation: condense 1s ease-in-out;
+}
+
+.chromosome.separated {
+  width: 30px;
+  height: 15px;
+  animation: moveToPolePole 2s ease-in-out forwards;
+}
+
+.chromosome.aligned {
+  transition: all 1s ease-in-out;
+  height: 40px;
+  transform-origin: center;
+  position: absolute;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.chromosome.decondensing {
+  opacity: 0.5;
+  filter: blur(2px);
+  transform: scale(0.8);
+  transition: all 1s ease;
+}
+
+.chromosome.duplicated {
+  height: 40px;
+  background: transparent;
+}
+
+.chromosome.duplicated::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.centromere {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: #bd93f9;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+}
+
+.centrosome {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  background: radial-gradient(circle at center, #64ffda, transparent);
+  border: 3px solid #64ffda;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  box-shadow: 0 0 15px rgba(100, 255, 218, 0.5);
+}
+
+.spindle {
+  position: absolute;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.3);
+  transform-origin: center;
+  transition: all 0.5s ease;
+}
+
+.spindle-apparatus {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: 
+    linear-gradient(90deg, transparent 48%, rgba(100, 255, 218, 0.2) 50%, transparent 52%),
+    radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(100, 255, 218, 0.1) 100%);
+  transition: opacity 1s ease;
+}
+
+.spindle-apparatus.pulling {
+  animation: pullApart 2s infinite ease-in-out;
+}
+
+.spindle-apparatus.early {
+  opacity: 0.3;
+  background: 
+    linear-gradient(90deg, transparent 49%, rgba(100, 255, 218, 0.2) 50%, transparent 51%),
+    linear-gradient(transparent 49%, rgba(100, 255, 218, 0.2) 50%, transparent 51%);
+}
+
+.spindle-apparatus.complete {
+  opacity: 1;
+}
+
+.spindle-apparatus.fully-attached {
+  background: linear-gradient(
+    90deg, 
+    transparent 48%, 
+    rgba(100, 255, 218, 0.4) 50%, 
+    transparent 52%
+  );
+  animation: pulseAttachment 2s infinite ease-in-out;
+}
+
+.microtubules {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.microtubule {
+  position: absolute;
+  width: 2px;
+  background: rgba(100, 255, 218, 0.6);
+  transform-origin: 0 50%;  /* Origin at connection point */
+  height: 0;  /* Start with no height */
+  transition: height 1s ease-out;
+}
+
+.microtubule.pulling {
+  animation: pullChromosomes 3s ease-in-out infinite;
+  transform-origin: left center;
+}
+
+.kinetochore {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #ff79c6;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  box-shadow: 0 0 5px rgba(255, 121, 198, 0.5);
+}
+
+.progress-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(100, 255, 218, 0.1);
+  margin: 2rem 0;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background: #64ffda;
+  transition: width 0.3s linear;
+}
+
+.stage-timeline {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 3rem;
+}
+
+.timeline-point {
+  width: 12px;
+  height: 12px;
+  background: #0a192f;
+  border: 2px solid #64ffda;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.timeline-point.active {
+  background: #64ffda;
+  transform: scale(1.2);
+}
+
+.timeline-point:hover::after {
+  content: attr(data-stage);
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0a192f;
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+.cleavage-furrow {
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  background: #ff79c6;
+  top: 50%;
+  transform: scaleY(var(--furrow-depth));
+  animation: furrowPinch 5s ease-in-out forwards;
+}
+
+.chromatin-network {
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  left: 10%;
+  top: 10%;
+  background: 
+    repeating-radial-gradient(
+      circle at 30% 30%,
+      rgba(189, 147, 249, 0.1) 0%,
+      rgba(189, 147, 249, 0.2) 10%,
+      transparent 20%
+    );
+  border-radius: 50%;
+  filter: blur(5px);
+  animation: chromatinMove 10s infinite ease-in-out;
+  transition: all 1s ease;
+}
+
+.tetrad-formation {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  left: calc(50% - 60px);
+  top: calc(50% - 60px);
+  border: 2px dashed rgba(255, 121, 198, 0.5);
+  border-radius: 10px;
+  animation: tetradForm 2s ease-in-out;
+}
+
+.chiasma {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: rgba(255, 121, 198, 0.5);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: chiasmaForm 2s infinite ease-in-out;
+}
+
+/* Add new styles for meiosis-specific features */
+.chromosome.tetrad {
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.crossing-over-marker {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: rgba(255, 121, 198, 0.5);
+  border-radius: 50%;
+  animation: crossingOverPulse 2s infinite;
+}
+
+.genetic-material-exchange {
+  position: absolute;
+  width: 30px;
+  height: 2px;
+  background: #ff79c6;
+  transform-origin: center;
+  animation: exchangeGenetic 3s infinite;
+}
+
+.cell-membrane.dividing {
+  clip-path: inset(0 calc(50% - var(--division-progress) * 50%) 0 calc(50% - var(--division-progress) * 50%));
+  animation: membranePinch 5s ease-in-out forwards;
+}
+
+.nucleus.fragments {
+  filter: url(#nuclear-fragments);
+  animation: fragmentNucleus 2s ease-in-out;
+}
+
+.dna-strands {
+  position: absolute;
+  width: 60%;
+  height: 60%;
+  left: 20%;
+  top: 20%;
+  z-index: 2;
+}
+
+.dna-strand {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(189, 147, 249, 0.2) 0px,
+    rgba(189, 147, 249, 0.2) 10px,
+    transparent 10px,
+    transparent 20px
+  );
+  border-radius: 40%;
+  transition: all 0.5s ease;
+}
+
+.dna-strand.new {
+  opacity: var(--replication-progress);
+  transform: translateX(calc(var(--replication-progress) * 20px));
+}
+
+.chromatin-network.duplicating {
+  animation: none;
+  transform: scale(calc(1 + var(--duplication-progress) * 0.3));
+  opacity: calc(0.8 + var(--duplication-progress) * 0.2);
+}
+
+.nucleus.forming {
+  animation: formNucleus 2s ease-in-out forwards;
+  transform-origin: center;
+}
+
+.dna-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+.dna-strand {
+  position: absolute;
+  width: 40%;
+  height: 40%;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(189, 147, 249, 0.3) 0px,
+    rgba(189, 147, 249, 0.3) 8px,
+    transparent 8px,
+    transparent 16px
+  );
+  border-radius: 40%;
+  transition: all 1s ease;
+}
+
+.dna-strand.daughter {
+  opacity: var(--replication-progress);
+  transform: translate(
+    calc(var(--replication-progress) * 20px),
+    calc(var(--replication-progress) * -10px)
+  );
+}
+
+.dna-strand.replicating {
+  animation: replicateDNA 4s infinite ease-in-out;
+}
+
+.microtubule-network {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.microtubule-aster {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  transform-origin: center;
+}
+
+.microtubule {
+  position: absolute;
+  width: 100px;
+  height: 2px;
+  background: rgba(100, 255, 218, 0.2);
+  transform-origin: left center;
+  left: 50%;
+  top: 50%;
+}
+
+.microtubule.growing {
+  animation: growMicrotubule 2s forwards;
+}
+
+.microtubule.shrinking {
+  animation: shrinkMicrotubule 2s forwards;
+}
+
+.centriole-pair {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  transform-origin: center;
+}
+
+.centriole {
+  position: absolute;
+  width: 16px;
+  height: 6px;
+  background: #64ffda;
+  border-radius: 2px;
+}
+
+.centriole.perpendicular {
+  transform: rotate(90deg);
+}
+
+.centriole-pair.duplicating {
+  animation: duplicateCentrioles 4s forwards;
+}
+
+.centriole-pair.separating {
+  animation: separateCentrioles 3s ease-in-out;
+}
+
+.centriole-pair.fading {
+  animation: fadeCentrioles 2s forwards;
+}
+
+.centrosome.fully-attached {
+  box-shadow: 0 0 20px rgba(100, 255, 218, 0.8);
+}
+
+.dna-fibers {
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  left: 10%;
+  top: 10%;
+  background: 
+    repeating-linear-gradient(
+      45deg,
+      rgba(189, 147, 249, 0.2) 0px,
+      rgba(189, 147, 249, 0.2) 5px,
+      transparent 5px,
+      transparent 10px
+    );
+  animation: rotateDNA 10s linear infinite;
+}
+
+.dna-replication-fork {
+  position: absolute;
+  width: 40%;
+  height: 40%;
+  left: 30%;
+  top: 30%;
+  animation: replicationProgress 8s linear infinite;
+}
+
+.nuclear-envelope {
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  left: 10%;
+  top: 10%;
+  border: 2px dashed #64ffda;
+  border-radius: 50%;
+  pointer-events: none;
+  transition: all 0.8s ease;
+  z-index: 3; /* Ensure it's above the DNA but below chromosomes */
+}
+
+.nuclear-envelope.dissolving {
+  opacity: 0;
+  border-style: dotted;
+  filter: blur(3px);
+}
+
+.nuclear-envelope.reforming {
+  opacity: 1;
+  border-style: solid;
+}
+
+.chromatin {
+  position: absolute;
+  width: 70%;
+  height: 70%;
+  left: 15%;
+  top: 15%;
+  background: rgba(255, 121, 198, 0.2);
+  border-radius: 50%;
+  filter: blur(3px);
+  z-index: 2; /* Below the nuclear envelope */
+  transition: all 1s ease;
+}
+
+.dna-content {
+  position: absolute;
+  width: 60%;
+  height: 60%;
+  left: 20%;
+  top: 20%;
+  z-index: 2;
+  transition: all 0.8s ease;
+}
+
+.chromatin-mass {
+  width: 100%;
+  height: 100%;
+  background: rgba(189, 147, 249, 0.2);
+  border-radius: 50%;
+  filter: blur(5px);
+  animation: decondenseChromatin 2s ease-in forwards;
+}
+
+.dna-replication {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.replication-fork {
+  position: absolute;
+  width: 40%;
+  height: 40%;
+  left: calc(30% + (var(--replication-progress) * 30%));
+  top: 30%;
+  transform: rotate(45deg);
+}
+
+.helicase {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: #bd93f9;
+  border-radius: 50%;
+  animation: unwind 2s infinite linear;
+}
+
+.leading-strand,
+.lagging-strand {
+  position: absolute;
+  height: 4px;
+  background: #ff79c6;
+  transform-origin: left center;
+}
+
+.leading-strand {
+  width: calc(100% * var(--replication-progress));
+  top: 45%;
+}
+
+.lagging-strand {
+  width: calc(20% * var(--replication-progress));
+  top: 55%;
+  animation: buildFragments 1s infinite;
+}
+
+.chromosome.condensing .chromatid {
+  width: calc(100% * (0.5 + var(--condensation-state) * 0.5));
+}
+
+@keyframes replicateDNA {
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.2) rotate(180deg); }
+  100% { transform: scale(1) rotate(360deg); }
+}
+
+@keyframes growMicrotubule {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@keyframes shrinkMicrotubule {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+
+@keyframes duplicateCentrioles {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.5) rotate(45deg); }
+  100% { transform: scale(1) rotate(90deg); }
+}
+
+@keyframes separateCentrioles {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(var(--separation-distance), 0); }
+}
+
+@keyframes fadeCentrioles {
+  to { opacity: 0; }
+}
+
+@keyframes formNucleus {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes spindle-form {
+  from {
+    opacity: 0;
+    transform: scaleX(0.2);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes splitNucleus {
+  0% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+  100% { clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%); }
+}
+
+@keyframes pullChromosomes {
+   0%, 100% { transform: scaleX(1); }
+  50% { transform: scaleX(0.8); }
+}
+
+@keyframes pullApart {
+  0%, 100% { transform: scaleX(1); }
+  50% { transform: scaleX(1.2); }
+}
+
+@keyframes furrowPinch {
+  0% { transform: scaleY(1); }
+  100% { transform: scaleY(20); }
+}
+
+@keyframes membranePinch {
+  0% { --division-progress: 0; }
+  100% { --division-progress: 1; }
+}
+
+@keyframes fragmentNucleus {
+  0% { clip-path: circle(50%); }
+  100% { clip-path: circle(0%); }
+}
+
+@keyframes condense {
+  from { transform: scale(0.5); opacity: 0.5; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes separate {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(var(--separation-distance)); }
+}
+
+@keyframes align {
+  0% { transform: translate(var(--start-x), var(--start-y)); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes pair {
+  0% { height: 40px; }
+  50% { height: 80px; opacity: 0.5; }
+  100% { height: 80px; opacity: 1; }
+}
+
+@keyframes tetradForm {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes chiasmaForm {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes chromatinMove {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.1); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes moveToCenter {
+  from { 
+    transform: translate(var(--start-x), var(--start-y)) rotate(var(--start-rotation)); 
+  }
+  to { 
+    transform: translate(-50%, -50%) rotate(0deg); 
+  }
+}
+
+@keyframes moveToPolePole {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(var(--separation-distance)); }
+}
+
+@keyframes spindleFormation {
+  from { transform: scaleX(0) scaleY(0); opacity: 0; }
+  to { transform: scaleX(1) scaleY(1); opacity: 1; }
+}
+
+@keyframes microtubuleGrow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@keyframes chromosomePull {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(var(--pull-distance)); }
+}
+
+@keyframes crossingOverPulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.2); opacity: 1; }
+}
+
+@keyframes exchangeGenetic {
+  0% { transform: rotate(0deg) scaleX(1); }
+  50% { transform: rotate(180deg) scaleX(1.5); }
+  100% { transform: rotate(360deg) scaleX(1); }
+}
+
+@keyframes pulseAttachment {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+@keyframes reformNucleus {
+  from { 
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to { 
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes decondenseChromatin {
+  from {
+    filter: blur(0px);
+    opacity: 1;
+  }
+  to {
+    filter: blur(5px);
+    opacity: 0.6;
+  }
+}
+
+@keyframes unwind {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes buildFragments {
+  0% { opacity: 0; transform: scaleX(0); }
+  50% { opacity: 1; transform: scaleX(1); }
+  100% { opacity: 0; transform: translateX(20px); }
+}
+
+.chromosome.separating {
+  transition: all 2s ease-in-out;
+}
+
+.nucleus.dividing {
+  position: relative;
+  overflow: hidden;
+}
+
+.nuclear-division {
+  position: absolute;
+  width: 2px;
+  height: 100%;
+  background: rgba(100, 255, 218, 0.5);
+  left: 50%;
+  transform: translateX(-50%);
+  animation: dividingNucleus 3s ease-in-out forwards;
+}
+
+.microtubule.pulling {
+  animation: pullMicrotubule 2s ease-in-out infinite;
+}
+
+@keyframes dividingNucleus {
+  0% {
+    box-shadow: 0 0 0 0 rgba(100, 255, 218, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 100px rgba(100, 255, 218, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(100, 255, 218, 0.5);
+  }
+}
+
+@keyframes pullMicrotubule {
+  0%, 100% {
+    transform: scaleX(1);
+  }
+  50% {
+    transform: scaleX(0.8);
+  }
+}
+
+/* Add responsive design */
+@media (max-width: 1024px) {
+  .simulation-area {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* DNA Replication Components */
+.dna-replication-bubble {
+  position: absolute;
+  width: calc(40% + var(--progress) * 20%);
+  height: 40%;
+  left: 30%;
+  top: 30%;
+  background: rgba(189, 147, 249, 0.1);
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.dna-double-helix {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(189, 147, 249, 0.3) 0px,
+    rgba(189, 147, 249, 0.3) 5px,
+    transparent 5px,
+    transparent 10px
+  );
+  animation: unwindDNA 3s linear infinite;
+}
+
+.helicase {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: #bd93f9;
+  border-radius: 50%;
+  left: calc(50% + var(--progress) * 25%);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 10px rgba(189, 147, 249, 0.5);
+}
+
+.dna-polymerase {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  background: #ff79c6;
+  border-radius: 3px;
+  transform-origin: center;
+}
+
+.dna-polymerase.leading {
+  left: calc(50% + var(--progress) * 20%);
+  top: 40%;
+  transform: rotate(45deg);
+}
+
+.dna-polymerase.lagging {
+  left: calc(50% + var(--progress) * 15%);
+  top: 60%;
+  transform: rotate(-45deg);
+}
+
+/* Chromosome Condensation */
+.chromosome.condensing {
+  transform: scale(calc(0.5 + var(--condensation-state) * 0.5));
+  opacity: calc(0.5 + var(--condensation-state) * 0.5);
+}
+
+.sister-chromatid {
+  position: absolute;
+  width: 100%;
+  height: 8px;
+  background: #ff79c6;
+  border-radius: 4px;
+  transition: all 0.5s ease;
+}
+
+.sister-chromatid.left {
+  transform: translateY(-10px);
+}
+
+.sister-chromatid.right {
+  transform: translateY(10px);
+}
+
+/* Nuclear Envelope */
+.nucleus.breaking {
+  border-style: dashed;
+  opacity: calc(1 - var(--breakdown-progress));
+  filter: blur(calc(var(--breakdown-progress) * 3px));
+}
+
+.nucleus.reforming {
+  border-style: solid;
+  opacity: var(--formation);
+  transform: scale(var(--formation));
+}
+
+/* Spindle Apparatus */
+.spindle-apparatus.forming {
+  opacity: var(--formation-progress);
+  transform: scaleX(var(--formation-progress));
+}
+
+.spindle-apparatus.complete {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.spindle-apparatus.pulling {
+  transform: scaleX(calc(1 - var(--shortening) * 0.2));
+}
+
+/* Metaphase Alignment */
+.metaphase-plate {
+  position: absolute;
+  width: 2px;
+  height: 80%;
+  left: 50%;
+  top: 10%;
+  background: rgba(100, 255, 218, 0.2);
+  transform: translateX(-50%);
+}
+
+.kinetochore {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: #ff79c6;
+  border-radius: 50%;
+  z-index: 5;
+}
+
+/* Cytokinesis */
+.cleavage-furrow {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: #ff79c6;
+  top: 50%;
+  transform: scaleY(calc(var(--furrow-depth) * 20));
+  box-shadow: 0 0 10px rgba(255, 121, 198, 0.5);
+}
+
+.daughter-cells {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  opacity: var(--separation);
+}
+
+/* Meiosis Specific */
+.tetrad {
+  position: relative;
+  height: 100px;
+}
+
+.crossing-over-point {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  background: rgba(255, 121, 198, 0.6);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: exchangeGenetic 2s infinite;
+}
+
+@keyframes unwindDNA {
+  from { transform: translateX(0) rotate(0deg); }
+  to { transform: translateX(20%) rotate(360deg); }
+}
+
+@keyframes exchangeGenetic {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.2); opacity: 1; }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .cell-visual {
+    width: 400px;
+    height: 400px;
+  }
+  
+  .simulation-area {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* INTERPHASE */
+.chromatin-network.relaxed {
+  opacity: 0.8;
+  filter: blur(3px);
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(189, 147, 249, 0.2) 0px,
+    rgba(189, 147, 249, 0.2) 5px,
+    transparent 5px,
+    transparent 10px
+  );
+}
+
+.dna-replication {
+  transform: scale(calc(1 + var(--progress) * 0.2));
+}
+
+.dna-strand.copying {
+  opacity: var(--progress);
+}
+
+/* PROPHASE */
+.chromosome.with-sister-chromatids {
+  opacity: calc(0.3 + var(--condensation) * 0.7);
+  transform: scale(calc(0.5 + var(--condensation) * 0.5));
+}
+
+.nucleus.breaking-down {
+  opacity: calc(1 - var(--breakdown) * 0.8);
+  filter: blur(calc(var(--breakdown) * 5px));
+}
+
+.centrosome.left {
+  transform: translateX(calc(var(--position) * -200px));
+}
+
+.centrosome.right {
+  transform: translateX(calc(var(--position) * 200px));
+}
+
+.spindle-apparatus.forming {
+  opacity: var(--formation);
+}
+
+/* METAPHASE */
+.metaphase-plate {
+  position: absolute;
+  left: 50%;
+  width: 2px;
+  height: 80%;
+  background: rgba(100, 255, 218, 0.2);
+}
+
+.chromosome.aligned {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* ANAPHASE */
+.chromosome-pair.separating {
+  --move-distance: calc(var(--separation) * 200px);
+}
+
+.chromosome-pair.separating .chromosome.left {
+  transform: translateX(calc(-1 * var(--move-distance)));
+}
+
+.chromosome-pair.separating .chromosome.right {
+  transform: translateX(var(--move-distance));
+}
+
+.microtubules.shortening {
+  transform: scaleX(calc(1 - var(--shortening) * 0.3));
+}
+
+/* INTERPHASE STYLES */
+.interphase-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.chromatin-network {
+  opacity: var(--relaxation);
+  filter: blur(3px);
+}
+
+.dna-replication-process {
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  left: 10%;
+  top: 10%;
+}
+
+.replication-bubble {
+  position: absolute;
+  width: calc(20px + var(--replication-progress) * 200px);
+  height: 100px;
+  left: calc(50% - var(--replication-progress) * 100px);
+  top: calc(50% - 50px);
+  background: rgba(189, 147, 249, 0.1);
+  border-radius: 50px;
+  overflow: hidden;
+}
+
+.helicase {
+  position: absolute;
+  left: calc(var(--replication-progress) * 100%);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  background: #bd93f9;
+  border-radius: 50%;
+  animation: rotate 2s linear infinite;
+}
+
+/* METAPHASE STYLES */
+.metaphase-plate {
+  position: absolute;
+  left: 50%;
+  width: 2px;
+  height: 80%;
+  top: 10%;
+  background: rgba(100, 255, 218, 0.2);
+  transform: translateX(-50%);
+}
+
+.chromosome-pair.aligned {
+  position: absolute;
+  left: 50%;
+  top: calc(50% + var(--offset) * 1px);
+  transform: translateX(-50%) translateX(calc((1 - var(--align-progress)) * 100px));
+  transition: transform 0.5s ease-out;
+}
+
+/* ANAPHASE STYLES */
+.separating-chromatids {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.chromosome.moving-left {
+  transform: translateX(calc(-200px * var(--separation)));
+}
+
+.chromosome.moving-right {
+  transform: translateX(calc(200px * var(--separation)));
+}
+
+.microtubules.shortening {
+  transform: scaleX(calc(1 - var(--pull-progress) * 0.3));
+}
+
+.spindle-apparatus.pulling {
+  animation: pulsePull 1s infinite ease-in-out;
+}
+
+@keyframes pulsePull {
+  0%, 100% { transform: scaleX(1); }
+  50% { transform: scaleX(0.95); }
+}
+
+/* Prophase-specific DNA visibility fixes */
+.prophase-container .condensing-chromosomes {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+}
+
+.prophase-container .chromosome-pair {
+  position: absolute;
+  width: 60px;
+  height: 30px;
+  background: #ff79c6;
+  border-radius: 5px;
+  transform-origin: center;
+  transform: translate(-50%, -50%) scale(var(--condensation));
+}
+
+/* Anaphase-specific microtubule fixes */
+.anaphase-container .microtubules {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+.anaphase-container .microtubule {
+  position: absolute;
+  width: 45%;
+  height: 2px;
+  background: rgba(100, 255, 218, 0.6);
+  left: 50%;
+  top: 50%;
+  transform-origin: left center;
+}
+
+.anaphase-container .microtubule.left {
+  transform: rotate(-20deg) scaleX(var(--pull-progress));
+}
+
+.anaphase-container .microtubule.right {
+  transform: rotate(20deg) scaleX(var(--pull-progress));
+}
+
+.anaphase-container .chromosome-set {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform-origin: center;
+}
+
+/* Prophase-specific styles */
+.chromatin-condensation {
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  left: 10%;
+  top: 10%;
+}
+
+.dispersed-chromatin {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: repeating-radial-gradient(
+    circle at center,
+    rgba(189, 147, 249, 0.2) 0px,
+    rgba(189, 147, 249, 0.2) 10px,
+    transparent 10px,
+    transparent 20px
+  );
+  filter: blur(5px);
+  border-radius: 50%;
+  transition: opacity 0.5s ease;
+}
+
+.condensing-strands {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform-origin: center;
+}
+
+.chromatin-strand {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(5px + var(--condense) * 15px);
+  height: calc(20px + var(--condense) * 60px);
+  background: #ff79c6;
+  border-radius: 5px;
+  transform-origin: center;
+  transform: translate(-50%, -50%) 
+             rotate(var(--rotate))
+             scale(calc(0.2 + var(--condense) * 0.8))
+             translateY(calc(var(--condense) * -50px));
+  animation: condenseStrand 1s ease-in-out;
+  animation-delay: calc(var(--delay) * 1s);
+  animation-fill-mode: forwards;
+  opacity: var(--condense);
+}
+
+@keyframes condenseStrand {
+  0% {
+    width: 5px;
+    height: 20px;
+    background: rgba(255, 121, 198, 0.3);
+  }
+  100% {
+    width: 20px;
+    height: 80px;
+    background: rgba(255, 121, 198, 1);
+  }
+}
+
+.chromosome-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 20px;
+  background: #bd93f9;
+  transform: translate(-50%, -50%);
+}
+
+/* Basic DNA/Chromosome Styles */
+.chromatin {
+  width: 40%;  /* Start smaller */
+  height: 40%;
+  position: absolute;
+  left: 30%;
+  top: 30%;
+  background: rgba(255, 121, 198, 0.3);
+  border-radius: 50%;
+  filter: blur(3px);
+  transition: all 1s ease;
+}
+
+.chromatin.replicating {
+  transform: scale(1.4);  /* Grow during replication */
+}
+
+.chromatin.replicated::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 121, 198, 0.3);
+  border-radius: 50%;
+  filter: blur(3px);
+  transform: translateX(50%);  /* Position the duplicate */
+  opacity: 0;
+  animation: fadeInChromatin 1s forwards;
+}
+
+@keyframes fadeInChromatin {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.chromosome {
+  width: 40px;
+  height: 20px;
+  position: absolute;
+  background: #ff79c6;
+  border-radius: 10px;
+}
+
+.sister-chromatid {
+  width: 100%;
+  height: 8px;
+  position: absolute;
+  background: #ff79c6;
+  border-radius: 4px;
+}
+
+/* Phase-specific styles */
+.nucleus {
+  width: 70%;
+  height: 70%;
+  position: absolute;
+  left: 15%;
+  top: 15%;
+  border: 2px solid #64ffda;
+  border-radius: 50%;
+}
+
+.nucleus.breaking {
+  border-style: dashed;
+  opacity: calc(1 - var(--breakdown));
+}
+
+.nucleus.forming {
+  opacity: var(--decondensation);
+}
+
+.chromosome.with-sister-chromatids {
+  transform: scale(calc(0.2 + var(--condensation) * 0.8));
+  left: calc(var(--position) * 60% + 20%);
+  top: calc(var(--position) * 60% + 20%);
+}
+
+.chromosome.aligned {
+  left: 50%;
+  top: calc(50% + var(--offset) * 1px);
+  transform: translateX(-50%);
+}
+
+.chromosome.moving-left {
+  transform: translateX(calc(-200px * var(--separation)));
+}
+
+.chromosome.moving-right {
+  transform: translateX(calc(200px * var(--separation)));
+}
+
+/* Prophase Styles */
+.condensing-chromosome {
+  position: absolute;
+  left: calc(var(--x) * 1%);
+  top: calc(var(--y) * 1%);
+  width: 40px;
+  height: 20px;
+  transform: scale(calc(0.2 + var(--condense) * 0.8));
+  transition: all 0.5s ease;
+}
+
+.chromatid-pair {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.chromatid {
+  position: absolute;
+  width: 100%;
+  height: 8px;
+  background: #ff79c6;
+  border-radius: 4px;
+}
+
+.chromatid:first-child {
+  top: 0;
+}
+
+.chromatid:last-child {
+  bottom: 0;
+}
+
+/* Anaphase Styles */
+.microtubules {
+  position: absolute;
+  width: 45%;
+  height: 2px;
+  background: #64ffda;
+  top: 50%;
+  transform-origin: center;
+}
+
+.microtubules.left {
+  left: 0;
+  transform: scaleX(calc(1 - var(--pull) * 0.3)) rotate(-20deg);
+}
+
+.microtubules.right {
+  right: 0;
+  transform: scaleX(calc(1 - var(--pull) * 0.3)) rotate(20deg);
+}
+
+.chromosome.moving-left {
+  transform: translateX(calc(-200px * var(--separation)));
+}
+
+.chromosome.moving-right {
+  transform: translateX(calc(200px * var(--separation)));
+}
+
+/* Cytokinesis Styles */
+.cleavage-furrow {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #ff79c6;
+  transform: scaleY(calc(1 + var(--pinch) * 20));
+}
+
+.daughter-cell {
+  position: absolute;
+  width: 45%;
+  height: 90%;
+  top: 5%;
+  border-radius: 50%;
+  background: rgba(40, 42, 54, 0.95);
+}
+
+.daughter-cell.left {
+  left: calc(2% + var(--separate) * 3%);
+}
+
+.daughter-cell.right {
+  right: calc(2% + var(--separate) * 3%);
+}
+
+/* Add new chromatin condensation styles */
+.chromatin-to-chromosomes {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.condensing-chromatin {
+  position: absolute;
+  width: 40%;
+  height: 40%;
+  background: rgba(255, 121, 198, 0.3);
+  border-radius: 50%;
+  filter: blur(3px);
+  transition: all 1s ease;
+  animation: condenseToStrands 5s ease-in-out forwards;
+}
+
+.condensing-chromatin::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: #bd93f9;
+  border-radius: 50%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  box-shadow: 0 0 5px rgba(189, 147, 249, 0.5);
+}
+
+.condensing-chromatin.split {
+  --split-distance: 20px;
+  clip-path: polygon(
+    0 0, 100% 0, 100% 45%, 0 45%,
+    0 55%, 100% 55%, 100% 100%, 0 100%
+  );
+}
+
+.condensing-chromatin.split::after {
+  opacity: 1;
+}
+
+@keyframes condenseToStrands {
+  0% {
+    width: 40%;
+    height: 40%;
+    border-radius: 50%;
+    filter: blur(3px);
+    transform: scale(1);
+  }
+  50% {
+    width: 60%;
+    height: 30%;
+    border-radius: 30%;
+    filter: blur(2px);
+    transform: scale(1.2) rotate(45deg);
+  }
+  100% {
+    width: 70px; /* Match metaphase width */
+    height: 30px; /* Match metaphase height */
+    border-radius: 8px;
+    filter: blur(0px);
+    transform: scale(1) rotate(90deg);
+  }
+}
+
+/* ...existing code... */
+
+/* Updated to match Prophase DNA size */
+.metaphase-chromosome {
+  width: 70px;
+  height: 30px; /* Match the height from prophase */
+  background: #ff79c6;
+  border-radius: 8px;
+  position: relative;
+  margin: 10px 0;
+}
+
+.metaphase-chromosomes {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 70px;
+  height: 140px; /* Increased to accommodate taller chromosomes */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px; /* Increased gap between chromosomes */
+  align-items: center;
+}
+
+/* ...existing code... */
+
+/* ...existing code... */
+
+/* Simplified styles for basic elements */
+.dna {
+  width: 70%;
+  height: 70%;
+  background: #ff79c6;
+  border-radius: 50%;
+  position: absolute;
+  left: 15%;
+  top: 15%;
+}
+
+.chromosome {
+  width: 60px;
+  height: 20px;
+  background: #ff79c6;
+  border-radius: 8px;
+  position: absolute;
+}
+
+.centromere {
+  width: 12px;
+  height: 12px;
+  background: #bd93f9;
+  border-radius: 50%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.spindle-line {
+  width: 2px;
+  height: 100%;
+  background: #64ffda;
+  position: absolute;
+  transform-origin: top;
+}
+
+.nucleus-envelope {
+  width: 80%;
+  height: 80%;
+  border: 2px dashed #64ffda;
+  border-radius: 50%;
+  position: absolute;
+  left: 10%;
+  top: 10%;
+}
+
+/* Stage-specific styles */
+.metaphase-plate {
+  width: 2px;
+  height: 80%;
+  background: #64ffda;
+  opacity: 0.3;
+  position: absolute;
+  left: 50%;
+  top: 10%;
+  transform: translateX(-50%);
+}
+
+.cleavage-furrow {
+  width: 100%;
+  height: 2px;
+  background: #ff79c6;
+  position: absolute;
+  top: 50%;
+  transform-origin: center;
+}
+
+/* ...existing code... */
+
+.chromatin-condensation {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chromatin-mass {
+  position: absolute;
+  background: rgba(255, 121, 198, 0.3);
+  border-radius: 50%;
+  transition: all 0.8s ease;
+  transform-origin: center;
+  z-index: 2;
+}
+
+.condensing-chromosome {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center;
+  border-radius: 8px;
+  transition: all 0.8s ease;
+  z-index: 3;
+}
+
+.chromatid {
+  position: absolute;
+  width: 100%;
+  height: 40%;
+  background: inherit;
+  border-radius: 4px;
+  transition: all 0.5s ease;
+}
+
+.chromatid.top {
+  top: -20px;
+}
+
+.chromatid.bottom {
+  bottom: -20px;
+}
+
+/* ...existing code... */

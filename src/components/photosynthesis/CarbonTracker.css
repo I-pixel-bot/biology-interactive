@@ -1,0 +1,253 @@
+.carbon-tracker {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a2634 0%, #0d1b2a 100%);
+  color: #fff;
+  padding: 2rem;
+  font-family: 'Roboto', sans-serif;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.header h2 {
+  font-size: 3rem;
+  color: #4ade80;
+  text-shadow: 0 0 15px rgba(74, 222, 128, 0.5);
+  margin-bottom: 1rem;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.carbon-cycle-diagram {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.carbon-reservoir {
+  background: rgba(0, 0, 0, 0.3);
+  border: 2px solid #4ade80;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transform-style: preserve-3d;
+}
+
+.carbon-reservoir:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 0 30px rgba(74, 222, 128, 0.3);
+}
+
+.carbon-reservoir.selected {
+  border-color: #ff9100;
+  box-shadow: 0 0 30px rgba(255, 145, 0, 0.4);
+}
+
+.carbon-particles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.carbon-particle {
+  position: absolute;
+  font-size: 0.8rem;
+  color: #4ade80;
+  text-shadow: 0 0 5px #4ade80;
+  animation: moveParticle 2s linear;
+}
+
+@keyframes moveParticle {
+  0% {
+    transform: translate(var(--start-x), var(--start-y)) scale(0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+    transform: translate(var(--start-x), var(--start-y)) scale(1);
+  }
+  80% {
+    opacity: 1;
+    transform: translate(var(--end-x), var(--end-y)) scale(1);
+  }
+  100% {
+    transform: translate(var(--end-x), var(--end-y)) scale(0);
+    opacity: 0;
+  }
+}
+
+.tutorial-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.tutorial-content {
+  background: #1a2634;
+  padding: 2rem;
+  border-radius: 12px;
+  border: 2px solid #4ade80;
+  max-width: 500px;
+  text-align: center;
+}
+
+.carbon-reservoir::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, rgba(74, 222, 128, 0.1) 0%, transparent 70%);
+  z-index: 0;
+}
+
+.carbon-reservoir h3 {
+  color: #4ade80;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.carbon-level {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+}
+
+.environmental-factors {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin: 2rem auto;
+  max-width: 1000px;
+}
+
+.factor-button {
+  background: rgba(0, 0, 0, 0.3);
+  border: 2px solid #4ade80;
+  color: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  transform-style: preserve-3d;
+}
+
+.factor-icon {
+  font-size: 2rem;
+}
+
+.factor-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.factor-impact {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.factor-button.active {
+  background: #4ade80;
+  color: #000;
+  box-shadow: 0 0 20px rgba(74, 222, 128, 0.4);
+}
+
+.process-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin: 3rem auto;
+  max-width: 1200px;
+}
+
+.process {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid #4ade80;
+}
+
+.process h4 {
+  color: #4ade80;
+  margin-bottom: 1rem;
+}
+
+.rate-indicator {
+  height: 4px;
+  background: #2d3748;
+  border-radius: 2px;
+  margin: 1rem 0;
+  overflow: hidden;
+}
+
+.rate-fill {
+  height: 100%;
+  background: #4ade80;
+  transition: width 0.5s ease;
+}
+
+.level-indicator {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0.3;
+  transition: all 0.3s ease;
+}
+
+.level-fill {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: linear-gradient(to top, #4ade80, transparent);
+  transition: height 0.5s ease;
+}
+
+@keyframes carbonFlow {
+  0% { transform: translateY(0); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateY(100px); opacity: 0; }
+}
+
+.atmosphere-to-biosphere {
+  --start-x: 50%;
+  --start-y: 10%;
+  --end-x: 50%;
+  --end-y: 90%;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}

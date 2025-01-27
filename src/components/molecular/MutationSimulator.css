@@ -1,0 +1,231 @@
+.mutation-simulator {
+  min-height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+  color: #fff;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.simulator-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.simulator-header h2 {
+  font-size: 3rem;
+  color: #00fff2;
+  text-shadow: 0 0 10px #00fff2;
+  margin-bottom: 1rem;
+}
+
+.simulator-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.input-section {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 2rem;
+  border-radius: 10px;
+  border: 1px solid #00fff2;
+  box-shadow: 0 0 20px rgba(0, 255, 242, 0.1);
+}
+
+.sequence-input {
+  width: 100%;
+  padding: 1rem;
+  background: #000;
+  border: 2px solid #00fff2;
+  border-radius: 4px;
+  color: #00fff2;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.mutation-controls {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.control-group {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #444;
+}
+
+.control-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #00fff2;
+}
+
+.control-group select, 
+.control-group input {
+  width: 100%;
+  padding: 0.75rem;
+  background: #000;
+  border: 1px solid #00fff2;
+  color: #fff;
+  border-radius: 4px;
+}
+
+.visualization {
+  position: relative;
+  min-height: 200px;
+  background: #000;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+  overflow: hidden;
+}
+
+.dna-strand {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.base {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1a1a1a;
+  border: 1px solid #00fff2;
+  border-radius: 4px;
+  font-size: 1.2rem;
+  color: #00fff2;
+  transition: all 0.3s ease, border-color 0.2s ease;
+  cursor: pointer;
+}
+
+.base:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(0, 255, 242, 0.4);
+}
+
+.base.targeted {
+  position: relative;
+  border-color: #ff3366;
+  border-width: 2px;
+  box-shadow: 0 0 10px #ff3366, inset 0 0 5px #ff3366;
+  animation: targetGlow 1.5s infinite;
+}
+
+@keyframes targetGlow {
+  0% { 
+    box-shadow: 0 0 10px #ff3366, inset 0 0 5px #ff3366;
+    border-color: #ff3366;
+  }
+  50% { 
+    box-shadow: 0 0 20px #ff3366, inset 0 0 10px #ff3366;
+    border-color: #ff0000;
+  }
+  100% { 
+    box-shadow: 0 0 10px #ff3366, inset 0 0 5px #ff3366;
+    border-color: #ff3366;
+  }
+}
+
+.base.mutated {
+  background: #ff0055;
+  color: #fff;
+  border-color: #ff0055;
+  animation: pulseMutation 1s infinite;
+}
+
+.results {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 2rem;
+  border-radius: 10px;
+  border: 1px solid #00fff2;
+}
+
+.mutation-info {
+  background: rgba(255, 0, 85, 0.1);
+  border: 1px solid #ff0055;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.apply-button, .reset-button {
+  flex: 1;
+  padding: 1rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.apply-button {
+  background: linear-gradient(45deg, #00fff2, #00ff73);
+  color: #000;
+}
+
+.reset-button {
+  background: linear-gradient(45deg, #ff3366, #ff6b6b);
+  color: #fff;
+}
+
+.reset-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(255, 51, 102, 0.4);
+}
+
+.apply-button:disabled,
+.reset-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.apply-button {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(45deg, #00fff2, #00ff73);
+  border: none;
+  border-radius: 4px;
+  color: #000;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 2rem;
+  transition: all 0.3s ease;
+}
+
+.apply-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(0, 255, 242, 0.4);
+}
+
+@keyframes pulseMutation {
+  0% { box-shadow: 0 0 0 0 rgba(255, 0, 85, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(255, 0, 85, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 0, 85, 0); }
+}
+
+/* Add responsive design */
+@media (max-width: 1024px) {
+  .simulator-container {
+    grid-template-columns: 1fr;
+  }
+}
