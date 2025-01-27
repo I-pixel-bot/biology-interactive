@@ -8,13 +8,19 @@ from PIL import Image
 import io
 import os
 import shutil
+import gdown
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})  # Allow all origins for demo
 
-# Load the model
-MODEL_PATH = os.environ.get('MODEL_PATH', './model/yolov8x.pt')
-print(f"Loading model from: {MODEL_PATH}")
+MODEL_PATH = "yolov8x.pt"
+
+if not os.path.exists(MODEL_PATH):
+    print("Downloading YOLOv8 model...")
+    # Extract the file ID from your Google Drive link
+    url = "https://drive.google.com/uc?id=1mvzR6zqNoyA8-jHtti1y4Y5gUm9WLlRO"
+    gdown.download(url, MODEL_PATH, quiet=False)
+
 model = YOLO(MODEL_PATH)
 
 # Add evolutionary information dictionary

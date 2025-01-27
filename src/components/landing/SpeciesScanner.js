@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './SpeciesScanner.css';
 
+const API_URL = 'https://yourusername.pythonanywhere.com';  // Replace yourusername with your actual PythonAnywhere username
+
 const SpeciesScanner = () => {
-  const API_URL = 'https://YOUR_USERNAME.pythonanywhere.com';  // Your PythonAnywhere URL
-  
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [loading, setLoading] = useState(true);
