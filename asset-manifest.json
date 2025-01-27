@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/biology-interactive/static/css/main.e0ae380c.css",
-    "main.js": "/biology-interactive/static/js/main.eb4b3be8.js",
+    "main.js": "/biology-interactive/static/js/main.c65b199c.js",
     "static/js/488.9c92ff38.chunk.js": "/biology-interactive/static/js/488.9c92ff38.chunk.js",
     "index.html": "/biology-interactive/index.html",
     "main.e0ae380c.css.map": "/biology-interactive/static/css/main.e0ae380c.css.map",
-    "main.eb4b3be8.js.map": "/biology-interactive/static/js/main.eb4b3be8.js.map",
+    "main.c65b199c.js.map": "/biology-interactive/static/js/main.c65b199c.js.map",
     "488.9c92ff38.chunk.js.map": "/biology-interactive/static/js/488.9c92ff38.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e0ae380c.css",
-    "static/js/main.eb4b3be8.js"
+    "static/js/main.c65b199c.js"
   ]
 }
